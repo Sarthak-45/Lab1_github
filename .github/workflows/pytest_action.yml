@@ -12,17 +12,19 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.8'
+        python-version: '3.10'
     
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        touch src/__init__.py
+        touch test/__init__.py
     
     - name: Run Tests and Generate XML Report
       run: |
@@ -30,7 +32,8 @@ jobs:
       continue-on-error: false
     
     - name: Upload Test Results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: test-results
         path: pytest-report.xml
